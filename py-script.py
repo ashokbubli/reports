@@ -9,7 +9,7 @@ BASE_URL = "https://api.github.com"
 
 # Your GitHub username and personal access token
 USERNAME = "ashokbubli"
-TOKEN = os.envirn.get("PAT")
+TOKEN = os.environ.get("PAT")
 
 # Create a CSV file to store the metadata
 with open("repository_metadata.csv", "w", newline="") as csv_file:
