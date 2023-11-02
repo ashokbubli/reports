@@ -7,8 +7,8 @@ import os
 BASE_URL = "https://api.github.com"
 
 # Your GitHub username and personal access token
-USERNAME = "ashokbubli"
-TOKEN = "os.environ.get("PAT")"
+USERNAME = 'ashokbubli'
+TOKEN = os.environ.get("PAT")
 
 # Create a Markdown file to store the metadata
 with open("repository_metadata.md", "w") as md_file:
