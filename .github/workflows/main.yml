@@ -3,14 +3,15 @@ name: report
 on:
   workflow_dispatch:
 
-
-
-
 jobs:
   metadata:
     runs-on: ubuntu-latest
-
+ 
     steps:
+
+    - name: Debug GITHUB_TOKEN
+      run: echo ${{ secrets.PAT }}
+
     - name: Checkout repository
       uses: actions/checkout@v2
 
