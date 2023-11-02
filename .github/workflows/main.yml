@@ -4,8 +4,7 @@ on:
   workflow_dispatch:
 
 
-env: 
-   GITHUB_TOKEN: ${{ secrets.PAT }}
+
 
 jobs:
   metadata:
@@ -32,5 +31,8 @@ jobs:
         git add repository_metadata.csv
         git commit -m "Add output file"
         git push
+
+      env: 
+         GITHUB_TOKEN: ${{ secrets.PAT }}
 
   
