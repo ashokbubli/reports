@@ -3,6 +3,10 @@ name: report
 on:
   workflow_dispatch:
 
+
+env: 
+   GITHUB_TOKEN: ${{ secrets.PAT }}
+
 jobs:
   metadata:
     runs-on: ubuntu-latest
@@ -19,8 +23,6 @@ jobs:
     - name: Install dependencies
       run: pip install requests pyyaml
 
-      env: 
-        GITHUB_TOKEN: ${{ secrets.PAT }}
         
     - name: Run Python script and save output
       run: |
