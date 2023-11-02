@@ -19,7 +19,9 @@ jobs:
     - name: Install dependencies
       run: pip install requests pyyaml
 
-    
+      env: 
+        GITHUB_TOKEN: ${{ secrets.PAT }}
+        
     - name: Run Python script and save output
       run: |
         python py-script.py > repository_metadata.csv
