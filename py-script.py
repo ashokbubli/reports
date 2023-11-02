@@ -1,5 +1,4 @@
 import requests
-import csv
 import yaml
 import base64
 import os
@@ -11,11 +10,9 @@ BASE_URL = "https://api.github.com"
 USERNAME = "ashokbubli"
 TOKEN = os.environ.get("PAT")
 
-# Create a CSV file to store the metadata
-with open("repository_metadata.csv", "w", newline="") as csv_file:
-    fieldnames = ["Repository", "Application", "IT Owner", "Key Expert", "Hosted Environment", "Accessibility", "Business Service Name"]
-    writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
-    writer.writeheader()
+# Create a Markdown file to store the metadata
+with open("repository_metadata.md", "w") as md_file:
+    md_file.write("# Repository Metadata\n\n")
 
     # Get a list of all repositories for your GitHub account (including private repositories)
     page = 1
@@ -40,6 +37,8 @@ with open("repository_metadata.csv", "w", newline="") as csv_file:
 
                 response = response_yaml if response_yaml.status_code == 200 else response_yml
 
+                md_file.write(f"## Repository: [{repo_name}]({repo_url})\n\n")
+
                 if response.status_code == 200:
                     content = response.json()
                     content_data = content.get("content", "")
@@ -50,30 +49,19 @@ with open("repository_metadata.csv", "w", newline="") as csv_file:
                     # Extract metadata from the YAML/YML file
                     metadata = yaml.safe_load(content_text)
 
-                    writer.writerow({
-                        "Repository": repo_name,
-                        "Application": metadata.get("application", ""),
-                        "IT Owner": metadata.get("contacts", {}).get("it-owner", ""),
-                        "Key Expert": ", ".join(metadata.get("contacts", {}).get("key-expert", [])),
-                        "Hosted Environment": metadata.get("contacts", {}).get("hosted-env", ""),
-                        "Accessibility": metadata.get("contacts", {}).get("accessibility", ""),
-                        "Business Service Name": metadata.get("servicenow", {}).get("business-service-name", ""),
-                    })
+                    md_file.write("### Metadata\n\n")
+                    md_file.write(f"- **Application:** {metadata.get('application', '')}\n")
+                    md_file.write(f"- **IT Owner:** {metadata.get('contacts', {}).get('it-owner', '')}\n")
+                    md_file.write(f"- **Key Expert:** {', '.join(metadata.get('contacts', {}).get('key-expert', []))}\n")
+                    md_file.write(f"- **Hosted Environment:** {metadata.get('contacts', {}).get('hosted-env', '')}\n")
+                    md_file.write(f"- **Accessibility:** {metadata.get('contacts', {}).get('accessibility', '')}\n")
+                    md_file.write(f"- **Business Service Name:** {metadata.get('servicenow', {}).get('business-service-name', '')}\n\n")
                 else:
                     print(f"No .abd/app.yaml or .abd/app.yml found in repository: {repo_name}")
-                    writer.writerow({
-                        "Repository": repo_name,
-                        "Application": "",
-                        "IT Owner": "",
-                        "Key Expert": "",
-                        "Hosted Environment": "",
-                        "Accessibility": "",
-                        "Business Service Name": "",
-                    })
 
             page += 1
         else:
             print(f"Error fetching repositories. Check your username and token.")
             break
 
-print("CSV report generated successfully.")
+print("Markdown report generated successfully.")
